@@ -5,7 +5,7 @@ const io = require("socket.io")(http, {
     origins: ["http://localhost:4200"],
   },
 });
-var SerialPort = require("serialport");
+const SerialPort = require('serialport');
 const ReadLine = SerialPort.parsers.Readline;
 var COM = "COM4";
 var serialPort = new SerialPort(COM, { baudRate: 9600 });
