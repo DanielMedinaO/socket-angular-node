@@ -9,7 +9,8 @@ import { environment } from 'src/environments/environment';
 export class SocketService {
 
   socket: Socket<DefaultEventsMap, DefaultEventsMap> | undefined;
-  observer!: Subscriber<any>;
+  serverMessages!: Subscriber<any>;
+  serverSerial!: Subscriber<any>;
   constructor() { }
 
   setupSocketConnection() {
@@ -21,16 +22,29 @@ export class SocketService {
     this.socket?.emit('message', message);
   }
 
+  getSocketSerial(): Observable<any> {
+    this.socket?.on('serial', (res) => {
+      this.serverSerial.next(res);
+    });
+    return this.getSocketSerialObservable();
+  }
+
   getSocketMessages(): Observable<any> {
     this.socket?.on('message', (res) => {
-      this.observer.next(res);
+      this.serverMessages.next(res);
     });
     return this.getSocketMessagesObservable();
   }
   
-  getSocketMessagesObservable(): Observable<any> {
+  private getSocketSerialObservable(): Observable<any> {
     return new Observable(observer => {
-      this.observer = observer;
+      this.serverSerial = observer;
+    });
+  }
+  
+  private getSocketMessagesObservable(): Observable<any> {
+    return new Observable(observer => {
+      this.serverMessages = observer;
     });
   }
   disconnect() {

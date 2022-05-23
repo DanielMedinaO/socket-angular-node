@@ -26,7 +26,8 @@ parser.on("error", (err) => console.log(err));
 serialPort.on("error", (err) => console.log(err));
 //SERIAL DATA RECEPTION
 parser.on("data", function (data) {
-  console.log(data.toString());
+  //console.log(data.toString());
+  io.emit('serial', data.toString());
 });
 
 // --->  SOCKET IO FUNCTIONS

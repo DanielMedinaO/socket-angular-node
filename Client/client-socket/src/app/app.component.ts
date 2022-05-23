@@ -8,13 +8,16 @@ import { SocketService } from './services/socket.service';
 })
 export class AppComponent {
   title = 'client-socket';
-  
+  serialData:number=0;
   constructor(private socketService: SocketService) { }
 
   ngOnInit() {
     this.socketService.setupSocketConnection();
     this.socketService.getSocketMessages().subscribe(data => {
-      console.log("observable", data);
+      console.log("socket->", data);
+    });
+    this.socketService.getSocketSerial().subscribe(data => {
+      this.serialData = Number(data);
     });
   }
 
