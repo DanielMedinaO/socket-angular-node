@@ -5,7 +5,32 @@ const io = require("socket.io")(http, {
     origins: ["http://localhost:4200"],
   },
 });
+var SerialPort = require("serialport");
+const ReadLine = SerialPort.parsers.Readline;
+var COM = "COM4";
+var serialPort = new SerialPort(COM, { baudRate: 9600 });
+const parser = serialPort.pipe(new ReadLine({ delimiter: "\r\n" }));
 const port = 3000;
+
+// --->  SERIAL COMMUNICATION FUNCTIONS
+
+//SERIAL OPEN
+parser.on("open", function () {
+  console.log("connection is opened");
+});
+serialPort.on("open", function () {
+  console.log("Serial Port " + COM + " is opened.");
+});
+//SERIAL ERROR
+parser.on("error", (err) => console.log(err));
+serialPort.on("error", (err) => console.log(err));
+//SERIAL DATA RECEPTION
+parser.on("data", function (data) {
+  console.log(data.toString());
+});
+
+// --->  SOCKET IO FUNCTIONS
+
 app.get("/", (req, res) => {
   res.send("<h1>Hi! I am the server (Socket.io)</h1>");
 });

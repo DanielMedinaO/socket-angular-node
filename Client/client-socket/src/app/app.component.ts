@@ -8,6 +8,7 @@ import { SocketService } from './services/socket.service';
 })
 export class AppComponent {
   title = 'client-socket';
+  
   constructor(private socketService: SocketService) { }
 
   ngOnInit() {
